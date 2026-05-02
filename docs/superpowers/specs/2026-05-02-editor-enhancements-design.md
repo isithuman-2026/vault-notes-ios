@@ -2,7 +2,7 @@
 
 ## Scope
 
-Five independent features added on top of the base vault-notes app:
+Five independent features added on top of the base sidian app:
 
 1. UITextView editor (prerequisite for all other features)
 2. Floating Markdown keyboard bar
@@ -42,8 +42,8 @@ final class EditorController: ObservableObject {
 Theming (background, foreground, font) is applied directly to `UITextView` properties, matching existing `AppTheme` values.
 
 **Files changed:**
-- `VaultNotes/Views/Editor/MarkdownEditorView.swift` — full replacement
-- `VaultNotes/Views/Editor/EditorController.swift` — new `ObservableObject`
+- `Sidian/Views/Editor/MarkdownEditorView.swift` — full replacement
+- `Sidian/Views/Editor/EditorController.swift` — new `ObservableObject`
 
 ---
 
@@ -73,8 +73,8 @@ The bar has three zones:
 All insertions go through a single `insertMarkdown(syntax:)` method on the `Coordinator` that reads and writes `UITextView.selectedRange` directly.
 
 **Files:**
-- `VaultNotes/Views/Editor/MarkdownBarView.swift` — new floating bar component
-- `VaultNotes/Views/Editor/MarkdownSyntax.swift` — enum of all supported syntax tokens with their open/close strings and cursor offset
+- `Sidian/Views/Editor/MarkdownBarView.swift` — new floating bar component
+- `Sidian/Views/Editor/MarkdownSyntax.swift` — enum of all supported syntax tokens with their open/close strings and cursor offset
 
 ---
 
@@ -108,8 +108,8 @@ Content: `List` with each `ParsedHeading` as a row. Heading indentation is `(lev
 **Empty state:** "No headings found" when the note contains no heading lines.
 
 **Files:**
-- `VaultNotes/Services/MarkdownParser.swift` — new service
-- `VaultNotes/Views/Editor/NoteNavigatorView.swift` — new sheet
+- `Sidian/Services/MarkdownParser.swift` — new service
+- `Sidian/Views/Editor/NoteNavigatorView.swift` — new sheet
 
 ---
 
@@ -134,8 +134,8 @@ Scroll position is stored as a `CGFloat` offset and restored by calling `scrollV
 `NoteView` also receives `vaultID: UUID?` as a parameter (passed from `VaultBrowserView` via `AppSettings.activeVaultID`) so `SyncService` knows which vault's manifest to consult.
 
 **Files changed:**
-- `VaultNotes/Views/Vault/VaultBrowserView.swift`
-- `VaultNotes/Views/Editor/NoteView.swift`
+- `Sidian/Views/Vault/VaultBrowserView.swift`
+- `Sidian/Views/Editor/NoteView.swift`
 
 ---
 
@@ -156,8 +156,8 @@ Copy button: taps write to `UIPasteboard.general.string`. Button icon switches t
 Background color uses `theme.editorBackground` darkened slightly (opacity overlay).
 
 **Files:**
-- `VaultNotes/Views/Editor/CodeBlockView.swift` — new component
-- `VaultNotes/Views/Editor/MarkdownPreviewView.swift` — register block style
+- `Sidian/Views/Editor/CodeBlockView.swift` — new component
+- `Sidian/Views/Editor/MarkdownPreviewView.swift` — register block style
 
 ---
 
@@ -228,12 +228,12 @@ A sheet presented over `NoteView` with two options:
 Diff computation: Myers diff algorithm on line arrays. Implement as `DiffEngine.diff(from: [String], to: [String]) -> [DiffLine]`. No third-party dependency.
 
 **Files:**
-- `VaultNotes/Models/VaultBookmark.swift` — add `isSMBCached` flag
-- `VaultNotes/Services/SyncService.swift` — new: manifest read/write, hash check, download, poll
-- `VaultNotes/Services/DiffEngine.swift` — new: Myers diff algorithm
-- `VaultNotes/Views/Sync/SyncConflictView.swift` — new: conflict resolution sheet
-- `VaultNotes/Views/Sync/DiffOverlayView.swift` — new: unified diff viewer
-- `VaultNotes/Views/Vault/VaultBrowserView.swift` — progress banner, NWPathMonitor
+- `Sidian/Models/VaultBookmark.swift` — add `isSMBCached` flag
+- `Sidian/Services/SyncService.swift` — new: manifest read/write, hash check, download, poll
+- `Sidian/Services/DiffEngine.swift` — new: Myers diff algorithm
+- `Sidian/Views/Sync/SyncConflictView.swift` — new: conflict resolution sheet
+- `Sidian/Views/Sync/DiffOverlayView.swift` — new: unified diff viewer
+- `Sidian/Views/Vault/VaultBrowserView.swift` — progress banner, NWPathMonitor
 
 ---
 
@@ -259,10 +259,10 @@ Diff computation: Myers diff algorithm on line arrays. Implement as `DiffEngine.
 Settings: toggle "Require authentication" (stored in `AppSettings`), timeout picker.
 
 **Files:**
-- `VaultNotes/Services/AppLockService.swift` — new
-- `VaultNotes/Views/RootView.swift` — overlay and scene phase handling
-- `VaultNotes/Models/AppSettings.swift` — add `appLockEnabled`, `appLockTimeout`
-- `VaultNotes/Views/Settings/SettingsView.swift` — lock settings rows
+- `Sidian/Services/AppLockService.swift` — new
+- `Sidian/Views/RootView.swift` — overlay and scene phase handling
+- `Sidian/Models/AppSettings.swift` — add `appLockEnabled`, `appLockTimeout`
+- `Sidian/Views/Settings/SettingsView.swift` — lock settings rows
 
 ---
 

@@ -1,4 +1,4 @@
-# vault-notes Code Index
+# Sidian Code Index
 
 Use this file to locate functions before reading source. Then use `Read` with `offset`/`limit` to jump directly to the relevant lines.
 

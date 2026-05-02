@@ -1,4 +1,4 @@
-# vault-notes iOS Implementation Plan
+# Sidian iOS Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -13,7 +13,7 @@
 ## File Structure
 
 ```
-VaultNotes/
+Sidian/
 ├── App.swift                         # Entry point, SwiftData container
 ├── Models/
 │   ├── VaultBookmark.swift           # SwiftData model: persisted vault
@@ -42,7 +42,7 @@ VaultNotes/
 └── Extensions/
     └── Color+Hex.swift               # Color init from hex string
 
-VaultNotesTests/
+SidianTests/
 ├── FileSystemServiceTests.swift
 ├── VaultManagerTests.swift
 ├── TemplateServiceTests.swift
@@ -54,21 +54,21 @@ VaultNotesTests/
 ## Task 1: Xcode Project and Dependencies
 
 **Files:**
-- Create: `VaultNotes.xcodeproj` (via Xcode)
-- Create: `VaultNotes/App.swift`
+- Create: `Sidian.xcodeproj` (via Xcode)
+- Create: `Sidian/App.swift`
 - Modify: `Package.swift` / SPM via Xcode (add swift-markdown-ui)
 
 - [ ] **Step 1: Create Xcode project**
 
-In Xcode: File > New > Project > App. Name: `VaultNotes`, Team: personal, Bundle ID: `com.vaultnotes.app`, Interface: SwiftUI, Language: Swift, Storage: SwiftData. Minimum deployment target: iOS 17.0.
+In Xcode: File > New > Project > App. Name: `Sidian`, Team: personal, Bundle ID: `com.vaultnotes.app`, Interface: SwiftUI, Language: Swift, Storage: SwiftData. Minimum deployment target: iOS 17.0.
 
 - [ ] **Step 2: Add swift-markdown-ui dependency**
 
-In Xcode: File > Add Package Dependencies. URL: `https://github.com/gonzalezreal/swift-markdown-ui`. Version: Up to Next Major from `2.4.0`. Add `MarkdownUI` to VaultNotes target.
+In Xcode: File > Add Package Dependencies. URL: `https://github.com/gonzalezreal/swift-markdown-ui`. Version: Up to Next Major from `2.4.0`. Add `MarkdownUI` to Sidian target.
 
 - [ ] **Step 3: Configure entitlements**
 
-In `VaultNotes.entitlements`, ensure these keys are present:
+In `Sidian.entitlements`, ensure these keys are present:
 ```xml
 <key>com.apple.security.files.user-selected.read-write</key>
 <true/>
@@ -83,7 +83,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct VaultNotesApp: App {
+struct SidianApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
@@ -95,7 +95,7 @@ struct VaultNotesApp: App {
 
 - [ ] **Step 5: Build to verify clean project**
 
-Run: `xcodebuild -scheme VaultNotes -destination 'platform=iOS Simulator,name=iPhone 16' build`
+Run: `xcodebuild -scheme Sidian -destination 'platform=iOS Simulator,name=iPhone 16' build`
 Expected: `** BUILD SUCCEEDED **`
 
 - [ ] **Step 6: Commit**
@@ -111,17 +111,17 @@ git commit -m "feat: initial Xcode project with SwiftData and swift-markdown-ui"
 ## Task 2: Data Models
 
 **Files:**
-- Create: `VaultNotes/Models/VaultBookmark.swift`
-- Create: `VaultNotes/Models/AppSettings.swift`
-- Create: `VaultNotesTests/VaultBookmarkTests.swift`
+- Create: `Sidian/Models/VaultBookmark.swift`
+- Create: `Sidian/Models/AppSettings.swift`
+- Create: `SidianTests/VaultBookmarkTests.swift`
 
 - [ ] **Step 1: Write failing test**
 
 ```swift
-// VaultNotesTests/VaultBookmarkTests.swift
+// SidianTests/VaultBookmarkTests.swift
 import XCTest
 import SwiftData
-@testable import VaultNotes
+@testable import Sidian
 
 final class VaultBookmarkTests: XCTestCase {
     func test_vaultBookmark_init_setsFields() {
@@ -142,13 +142,13 @@ final class VaultBookmarkTests: XCTestCase {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `xcodebuild -scheme VaultNotes -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:VaultNotesTests/VaultBookmarkTests test`
+Run: `xcodebuild -scheme Sidian -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:SidianTests/VaultBookmarkTests test`
 Expected: FAIL — `VaultBookmark` not defined.
 
 - [ ] **Step 3: Implement VaultBookmark**
 
 ```swift
-// VaultNotes/Models/VaultBookmark.swift
+// Sidian/Models/VaultBookmark.swift
 import Foundation
 import SwiftData
 
@@ -171,7 +171,7 @@ final class VaultBookmark {
 - [ ] **Step 4: Implement AppSettings**
 
 ```swift
-// VaultNotes/Models/AppSettings.swift
+// Sidian/Models/AppSettings.swift
 import Foundation
 import SwiftData
 
@@ -189,13 +189,13 @@ final class AppSettings {
 
 - [ ] **Step 5: Run tests to verify they pass**
 
-Run: `xcodebuild -scheme VaultNotes -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:VaultNotesTests/VaultBookmarkTests test`
+Run: `xcodebuild -scheme Sidian -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:SidianTests/VaultBookmarkTests test`
 Expected: PASS
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add VaultNotes/Models/ VaultNotesTests/VaultBookmarkTests.swift
+git add Sidian/Models/ SidianTests/VaultBookmarkTests.swift
 git commit -m "feat: SwiftData models for VaultBookmark and AppSettings"
 ```
 
@@ -204,15 +204,15 @@ git commit -m "feat: SwiftData models for VaultBookmark and AppSettings"
 ## Task 3: FileSystemService
 
 **Files:**
-- Create: `VaultNotes/Services/FileSystemService.swift`
-- Create: `VaultNotesTests/FileSystemServiceTests.swift`
+- Create: `Sidian/Services/FileSystemService.swift`
+- Create: `SidianTests/FileSystemServiceTests.swift`
 
 - [ ] **Step 1: Write failing tests**
 
 ```swift
-// VaultNotesTests/FileSystemServiceTests.swift
+// SidianTests/FileSystemServiceTests.swift
 import XCTest
-@testable import VaultNotes
+@testable import Sidian
 
 final class FileSystemServiceTests: XCTestCase {
     var tempDir: URL!
@@ -295,13 +295,13 @@ final class FileSystemServiceTests: XCTestCase {
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `xcodebuild -scheme VaultNotes -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:VaultNotesTests/FileSystemServiceTests test`
+Run: `xcodebuild -scheme Sidian -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:SidianTests/FileSystemServiceTests test`
 Expected: FAIL — `FileSystemService` not defined.
 
 - [ ] **Step 3: Implement FileSystemService**
 
 ```swift
-// VaultNotes/Services/FileSystemService.swift
+// Sidian/Services/FileSystemService.swift
 import Foundation
 
 struct VaultFile: Identifiable, Hashable {
@@ -357,13 +357,13 @@ final class FileSystemService {
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `xcodebuild -scheme VaultNotes -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:VaultNotesTests/FileSystemServiceTests test`
+Run: `xcodebuild -scheme Sidian -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:SidianTests/FileSystemServiceTests test`
 Expected: PASS
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add VaultNotes/Services/FileSystemService.swift VaultNotesTests/FileSystemServiceTests.swift
+git add Sidian/Services/FileSystemService.swift SidianTests/FileSystemServiceTests.swift
 git commit -m "feat: FileSystemService with list, read, write, create"
 ```
 
@@ -372,15 +372,15 @@ git commit -m "feat: FileSystemService with list, read, write, create"
 ## Task 4: VaultManager
 
 **Files:**
-- Create: `VaultNotes/Services/VaultManager.swift`
-- Create: `VaultNotesTests/VaultManagerTests.swift`
+- Create: `Sidian/Services/VaultManager.swift`
+- Create: `SidianTests/VaultManagerTests.swift`
 
 - [ ] **Step 1: Write failing tests**
 
 ```swift
-// VaultNotesTests/VaultManagerTests.swift
+// SidianTests/VaultManagerTests.swift
 import XCTest
-@testable import VaultNotes
+@testable import Sidian
 
 final class VaultManagerTests: XCTestCase {
     var tempDir: URL!
@@ -414,13 +414,13 @@ final class VaultManagerTests: XCTestCase {
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `xcodebuild -scheme VaultNotes -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:VaultNotesTests/VaultManagerTests test`
+Run: `xcodebuild -scheme Sidian -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:SidianTests/VaultManagerTests test`
 Expected: FAIL — `VaultManager` not defined.
 
 - [ ] **Step 3: Implement VaultManager**
 
 ```swift
-// VaultNotes/Services/VaultManager.swift
+// Sidian/Services/VaultManager.swift
 import Foundation
 
 enum VaultManagerError: Error {
@@ -463,13 +463,13 @@ final class VaultManager {
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `xcodebuild -scheme VaultNotes -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:VaultNotesTests/VaultManagerTests test`
+Run: `xcodebuild -scheme Sidian -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:SidianTests/VaultManagerTests test`
 Expected: PASS
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add VaultNotes/Services/VaultManager.swift VaultNotesTests/VaultManagerTests.swift
+git add Sidian/Services/VaultManager.swift SidianTests/VaultManagerTests.swift
 git commit -m "feat: VaultManager for bookmark creation and resolution"
 ```
 
@@ -478,17 +478,17 @@ git commit -m "feat: VaultManager for bookmark creation and resolution"
 ## Task 5: Theme System
 
 **Files:**
-- Create: `VaultNotes/Theme/AppTheme.swift`
-- Create: `VaultNotes/Extensions/Color+Hex.swift`
-- Create: `VaultNotesTests/ThemeServiceTests.swift`
+- Create: `Sidian/Theme/AppTheme.swift`
+- Create: `Sidian/Extensions/Color+Hex.swift`
+- Create: `SidianTests/ThemeServiceTests.swift`
 
 - [ ] **Step 1: Write failing tests**
 
 ```swift
-// VaultNotesTests/ThemeServiceTests.swift
+// SidianTests/ThemeServiceTests.swift
 import XCTest
 import SwiftUI
-@testable import VaultNotes
+@testable import Sidian
 
 final class ThemeServiceTests: XCTestCase {
     func test_allThemes_notEmpty() {
@@ -518,13 +518,13 @@ final class ThemeServiceTests: XCTestCase {
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `xcodebuild -scheme VaultNotes -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:VaultNotesTests/ThemeServiceTests test`
+Run: `xcodebuild -scheme Sidian -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:SidianTests/ThemeServiceTests test`
 Expected: FAIL — `AppTheme` not defined.
 
 - [ ] **Step 3: Implement Color+Hex**
 
 ```swift
-// VaultNotes/Extensions/Color+Hex.swift
+// Sidian/Extensions/Color+Hex.swift
 import SwiftUI
 
 extension Color {
@@ -544,7 +544,7 @@ extension Color {
 - [ ] **Step 4: Implement AppTheme**
 
 ```swift
-// VaultNotes/Theme/AppTheme.swift
+// Sidian/Theme/AppTheme.swift
 import SwiftUI
 
 struct AppTheme: Identifiable {
@@ -666,13 +666,13 @@ extension AppTheme {
 
 - [ ] **Step 5: Run tests to verify they pass**
 
-Run: `xcodebuild -scheme VaultNotes -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:VaultNotesTests/ThemeServiceTests test`
+Run: `xcodebuild -scheme Sidian -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:SidianTests/ThemeServiceTests test`
 Expected: PASS
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add VaultNotes/Theme/ VaultNotes/Extensions/ VaultNotesTests/ThemeServiceTests.swift
+git add Sidian/Theme/ Sidian/Extensions/ SidianTests/ThemeServiceTests.swift
 git commit -m "feat: AppTheme with 8 built-in color schemes"
 ```
 
@@ -681,15 +681,15 @@ git commit -m "feat: AppTheme with 8 built-in color schemes"
 ## Task 6: TemplateService
 
 **Files:**
-- Create: `VaultNotes/Services/TemplateService.swift`
-- Create: `VaultNotesTests/TemplateServiceTests.swift`
+- Create: `Sidian/Services/TemplateService.swift`
+- Create: `SidianTests/TemplateServiceTests.swift`
 
 - [ ] **Step 1: Write failing tests**
 
 ```swift
-// VaultNotesTests/TemplateServiceTests.swift
+// SidianTests/TemplateServiceTests.swift
 import XCTest
-@testable import VaultNotes
+@testable import Sidian
 
 final class TemplateServiceTests: XCTestCase {
     var tempDir: URL!
@@ -747,13 +747,13 @@ final class TemplateServiceTests: XCTestCase {
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `xcodebuild -scheme VaultNotes -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:VaultNotesTests/TemplateServiceTests test`
+Run: `xcodebuild -scheme Sidian -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:SidianTests/TemplateServiceTests test`
 Expected: FAIL — `TemplateService` not defined.
 
 - [ ] **Step 3: Implement TemplateService**
 
 ```swift
-// VaultNotes/Services/TemplateService.swift
+// Sidian/Services/TemplateService.swift
 import Foundation
 
 final class TemplateService {
@@ -788,13 +788,13 @@ final class TemplateService {
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `xcodebuild -scheme VaultNotes -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:VaultNotesTests/TemplateServiceTests test`
+Run: `xcodebuild -scheme Sidian -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:SidianTests/TemplateServiceTests test`
 Expected: PASS
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add VaultNotes/Services/TemplateService.swift VaultNotesTests/TemplateServiceTests.swift
+git add Sidian/Services/TemplateService.swift SidianTests/TemplateServiceTests.swift
 git commit -m "feat: TemplateService detects templates folder and lists templates"
 ```
 
@@ -803,15 +803,15 @@ git commit -m "feat: TemplateService detects templates folder and lists template
 ## Task 7: RootView and Onboarding
 
 **Files:**
-- Create: `VaultNotes/Views/RootView.swift`
-- Create: `VaultNotes/Views/Vault/OnboardingView.swift`
+- Create: `Sidian/Views/RootView.swift`
+- Create: `Sidian/Views/Vault/OnboardingView.swift`
 
 These views are wired to SwiftData — no unit test, verify visually in simulator.
 
 - [ ] **Step 1: Implement OnboardingView**
 
 ```swift
-// VaultNotes/Views/Vault/OnboardingView.swift
+// Sidian/Views/Vault/OnboardingView.swift
 import SwiftUI
 import SwiftData
 
@@ -864,7 +864,7 @@ struct OnboardingView: View {
 - [ ] **Step 2: Implement DocumentPickerView (UIKit wrapper)**
 
 ```swift
-// VaultNotes/Views/Vault/DocumentPickerView.swift
+// Sidian/Views/Vault/DocumentPickerView.swift
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -897,7 +897,7 @@ struct DocumentPickerView: UIViewControllerRepresentable {
 - [ ] **Step 3: Implement RootView**
 
 ```swift
-// VaultNotes/Views/RootView.swift
+// Sidian/Views/RootView.swift
 import SwiftUI
 import SwiftData
 
@@ -943,7 +943,7 @@ Run in Xcode on iPhone 16 simulator. Expected: onboarding screen with "Open Vaul
 - [ ] **Step 5: Commit**
 
 ```bash
-git add VaultNotes/Views/
+git add Sidian/Views/
 git commit -m "feat: onboarding flow with document picker and bookmark persistence"
 ```
 
@@ -952,15 +952,15 @@ git commit -m "feat: onboarding flow with document picker and bookmark persisten
 ## Task 8: Vault Browser — Folder Tree and File List
 
 **Files:**
-- Create: `VaultNotes/Views/Vault/VaultBrowserView.swift`
-- Create: `VaultNotes/Views/Vault/FolderTreeView.swift`
-- Create: `VaultNotes/Views/Vault/FileListView.swift`
-- Create: `VaultNotes/Views/Vault/VaultSwitcherView.swift`
+- Create: `Sidian/Views/Vault/VaultBrowserView.swift`
+- Create: `Sidian/Views/Vault/FolderTreeView.swift`
+- Create: `Sidian/Views/Vault/FileListView.swift`
+- Create: `Sidian/Views/Vault/VaultSwitcherView.swift`
 
 - [ ] **Step 1: Implement VaultBrowserView (NavigationSplitView)**
 
 ```swift
-// VaultNotes/Views/Vault/VaultBrowserView.swift
+// Sidian/Views/Vault/VaultBrowserView.swift
 import SwiftUI
 
 struct VaultBrowserView: View {
@@ -1008,7 +1008,7 @@ struct VaultBrowserView: View {
 - [ ] **Step 2: Implement FolderTreeView**
 
 ```swift
-// VaultNotes/Views/Vault/FolderTreeView.swift
+// Sidian/Views/Vault/FolderTreeView.swift
 import SwiftUI
 
 struct FolderTreeView: View {
@@ -1063,7 +1063,7 @@ struct FolderRowView: View {
 - [ ] **Step 3: Implement FileListView**
 
 ```swift
-// VaultNotes/Views/Vault/FileListView.swift
+// Sidian/Views/Vault/FileListView.swift
 import SwiftUI
 
 struct FileListView: View {
@@ -1146,7 +1146,7 @@ struct FileListView: View {
 - [ ] **Step 4: Implement VaultSwitcherView**
 
 ```swift
-// VaultNotes/Views/Vault/VaultSwitcherView.swift
+// Sidian/Views/Vault/VaultSwitcherView.swift
 import SwiftUI
 import SwiftData
 
@@ -1221,7 +1221,7 @@ Open a test folder. Expected: sidebar shows folder tree with disclosure groups. 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add VaultNotes/Views/Vault/
+git add Sidian/Views/Vault/
 git commit -m "feat: vault browser with folder tree, file list, and vault switcher"
 ```
 
@@ -1230,12 +1230,12 @@ git commit -m "feat: vault browser with folder tree, file list, and vault switch
 ## Task 9: Template Picker View
 
 **Files:**
-- Create: `VaultNotes/Views/Vault/TemplatePickerView.swift`
+- Create: `Sidian/Views/Vault/TemplatePickerView.swift`
 
 - [ ] **Step 1: Implement TemplatePickerView**
 
 ```swift
-// VaultNotes/Views/Vault/TemplatePickerView.swift
+// Sidian/Views/Vault/TemplatePickerView.swift
 import SwiftUI
 
 struct TemplatePickerView: View {
@@ -1280,7 +1280,7 @@ Create a `Templates/` folder inside a test vault with two `.md` files. Tap "New 
 - [ ] **Step 3: Commit**
 
 ```bash
-git add VaultNotes/Views/Vault/TemplatePickerView.swift
+git add Sidian/Views/Vault/TemplatePickerView.swift
 git commit -m "feat: template picker for new note creation"
 ```
 
@@ -1289,14 +1289,14 @@ git commit -m "feat: template picker for new note creation"
 ## Task 10: Note Editor and Preview
 
 **Files:**
-- Create: `VaultNotes/Views/Editor/NoteView.swift`
-- Create: `VaultNotes/Views/Editor/MarkdownEditorView.swift`
-- Create: `VaultNotes/Views/Editor/MarkdownPreviewView.swift`
+- Create: `Sidian/Views/Editor/NoteView.swift`
+- Create: `Sidian/Views/Editor/MarkdownEditorView.swift`
+- Create: `Sidian/Views/Editor/MarkdownPreviewView.swift`
 
 - [ ] **Step 1: Implement MarkdownEditorView**
 
 ```swift
-// VaultNotes/Views/Editor/MarkdownEditorView.swift
+// Sidian/Views/Editor/MarkdownEditorView.swift
 import SwiftUI
 
 struct MarkdownEditorView: View {
@@ -1317,7 +1317,7 @@ struct MarkdownEditorView: View {
 - [ ] **Step 2: Implement MarkdownPreviewView**
 
 ```swift
-// VaultNotes/Views/Editor/MarkdownPreviewView.swift
+// Sidian/Views/Editor/MarkdownPreviewView.swift
 import SwiftUI
 import MarkdownUI
 
@@ -1340,7 +1340,7 @@ struct MarkdownPreviewView: View {
 - [ ] **Step 3: Implement NoteView**
 
 ```swift
-// VaultNotes/Views/Editor/NoteView.swift
+// Sidian/Views/Editor/NoteView.swift
 import SwiftUI
 import SwiftData
 
@@ -1408,7 +1408,7 @@ Open a vault, select a `.md` file. Expected: preview rendered by swift-markdown-
 - [ ] **Step 5: Commit**
 
 ```bash
-git add VaultNotes/Views/Editor/
+git add Sidian/Views/Editor/
 git commit -m "feat: Markdown editor and preview with save/edit toggle"
 ```
 
@@ -1417,13 +1417,13 @@ git commit -m "feat: Markdown editor and preview with save/edit toggle"
 ## Task 11: Settings and Theme Picker
 
 **Files:**
-- Create: `VaultNotes/Views/Settings/SettingsView.swift`
-- Create: `VaultNotes/Views/Settings/ThemePickerView.swift`
+- Create: `Sidian/Views/Settings/SettingsView.swift`
+- Create: `Sidian/Views/Settings/ThemePickerView.swift`
 
 - [ ] **Step 1: Implement ThemePickerView**
 
 ```swift
-// VaultNotes/Views/Settings/ThemePickerView.swift
+// Sidian/Views/Settings/ThemePickerView.swift
 import SwiftUI
 import SwiftData
 
@@ -1486,7 +1486,7 @@ struct ThemeSwatchView: View {
 - [ ] **Step 2: Implement SettingsView**
 
 ```swift
-// VaultNotes/Views/Settings/SettingsView.swift
+// Sidian/Views/Settings/SettingsView.swift
 import SwiftUI
 
 struct SettingsView: View {
@@ -1508,7 +1508,7 @@ Open Settings from vault browser toolbar. Tap "Color Scheme". Expected: grid of 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add VaultNotes/Views/Settings/
+git add Sidian/Views/Settings/
 git commit -m "feat: settings screen and color scheme picker with live swatches"
 ```
 
@@ -1519,8 +1519,8 @@ git commit -m "feat: settings screen and color scheme picker with live swatches"
 iOS revokes security-scoped access when the app goes to background. Wrap vault file access so it restarts scope on foreground.
 
 **Files:**
-- Modify: `VaultNotes/Views/Vault/VaultBrowserView.swift`
-- Modify: `VaultNotes/Views/Editor/NoteView.swift`
+- Modify: `Sidian/Views/Vault/VaultBrowserView.swift`
+- Modify: `Sidian/Views/Editor/NoteView.swift`
 
 - [ ] **Step 1: Add scoped access management to VaultBrowserView**
 
@@ -1571,7 +1571,7 @@ Run on simulator. Open a vault note, edit content, background the app (Home butt
 - [ ] **Step 4: Commit**
 
 ```bash
-git add VaultNotes/Views/Vault/VaultBrowserView.swift VaultNotes/Views/Editor/NoteView.swift
+git add Sidian/Views/Vault/VaultBrowserView.swift Sidian/Views/Editor/NoteView.swift
 git commit -m "fix: restart security-scoped access on app foreground"
 ```
 
