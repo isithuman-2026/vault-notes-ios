@@ -51,6 +51,15 @@ xcodebuild -scheme VaultNotes -destination 'platform=iOS Simulator,name=iPhone 1
 - `VaultNotes/App.swift` — entry point, SwiftData container setup
 - `VaultNotesTests/` — XCTest unit tests mirroring service layer
 
+## Context7 (MCP — use when working in this project)
+
+When `mcp__context7__*` tools are available, use them to pull current Swift/SwiftUI/SwiftData/swift-markdown-ui API docs before writing or reviewing code. Do not rely on training-data knowledge for API signatures — frameworks change between Xcode releases.
+
+Recommended lookups at session start:
+- `SwiftData` — model macros, `@Query`, `ModelContainer`, `ModelContext`
+- `SwiftUI` — `NavigationSplitView`, `DocumentPickerViewController`, security-scoped resource APIs
+- `swift-markdown-ui` — `Markdown` view, `markdownTheme`
+
 ## Tech Stack
 
 - Swift 6, SwiftUI, iOS 17+
